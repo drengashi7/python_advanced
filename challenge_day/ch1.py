@@ -1,4 +1,7 @@
-class Person:
+from abc import ABC, abstractmethod
+import streamlit as st
+
+class Person(ABC):
     def __init__(self, name, age, weight, height):
         self.name = name
         self.age = age
@@ -58,27 +61,54 @@ class Adult(Person):
 
 class Child(Person):
     def calculate_bmi(self):
-        return (self.weight / (self.height ** 2)) * 0.95  # adjustment
+        return (self.weight / (self.height ** 2)) * 1.3# adjustment
 
     def get_bmi_category(self):
         bmi = self.calculate_bmi()
         if bmi < 14:
             return "Underweight"
-        elif bmi < 18:
+        elif bmi < 18.5:
             return "Normal weight"
-        elif bmi < 24:
+        elif bmi < 24.9:
             return "Overweight"
         else:
             return "Obese"
 
 
-# ---- Main Program ----
-name = input("Enter name: ")
-age = int(input("Enter age: "))
-weight = float(input("Enter weight (kg): "))
-height = float(input("Enter height (m): "))
 
-if age >= 18:
-    person = Adult(name, age, weight, height)
-else:
-    person = Child(name, age, weight, height)
+# name = input("Enter name: ")
+# age = int(input("Enter age: "))
+# weight = float(input("Enter weight (kg): "))
+# height = float(input("Enter height (m): "))
+#
+# if age >= 18:
+#     person = Adult(name, age, weight, height)
+# else:
+#     person = Child(name, age, weight, height)
+#
+# person.print_info()
+
+st.title("BMI Calculator")
+
+name = st.text_input("Enter name")
+age = st.number_input("Enter age", min_value=0)
+weight = st.number_input("Enter weight (kg)", min_value=0.0)
+height = st.number_input("Enter height (m)", min_value=0.0)
+
+if st.button("Calculate BMI"):
+    if age == 0 or weight == 0 or height == 0:
+        st.warning("Please fill all fields with valid values.")
+    else:
+        if age >= 18:
+            person = Adult(name, age, weight, height)
+        else:
+            person = Child(name, age, weight, height)
+
+        bmi = person.calculate_bmi()
+        category = person.get_bmi_category()
+
+        st.subheader("Result")
+        st.write(f"Name: {name}")
+        st.write(f"Age: {age}")
+        st.write(f"BMI: {bmi:.2f}")
+        st.write(f"Category: {category}")
