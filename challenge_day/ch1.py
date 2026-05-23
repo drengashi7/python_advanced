@@ -1,5 +1,6 @@
-from abc import ABC, abstractmethod
 import streamlit as st
+from abc import ABC, abstractmethod
+
 
 class Person(ABC):
     def __init__(self, name, age, weight, height):
@@ -49,6 +50,7 @@ class Adult(Person):
 
     def get_bmi_category(self):
         bmi = self.calculate_bmi()
+
         if bmi < 18.5:
             return "Underweight"
         elif bmi < 24.9:
@@ -61,10 +63,11 @@ class Adult(Person):
 
 class Child(Person):
     def calculate_bmi(self):
-        return (self.weight / (self.height ** 2)) * 1.3# adjustment
+        return (self.weight / (self.height ** 2)) * 1.3
 
     def get_bmi_category(self):
         bmi = self.calculate_bmi()
+
         if bmi < 14:
             return "Underweight"
         elif bmi < 18.5:
@@ -75,19 +78,6 @@ class Child(Person):
             return "Obese"
 
 
-
-# name = input("Enter name: ")
-# age = int(input("Enter age: "))
-# weight = float(input("Enter weight (kg): "))
-# height = float(input("Enter height (m): "))
-#
-# if age >= 18:
-#     person = Adult(name, age, weight, height)
-# else:
-#     person = Child(name, age, weight, height)
-#
-# person.print_info()
-
 st.title("BMI Calculator")
 
 name = st.text_input("Enter name")
@@ -96,8 +86,10 @@ weight = st.number_input("Enter weight (kg)", min_value=0.0)
 height = st.number_input("Enter height (m)", min_value=0.0)
 
 if st.button("Calculate BMI"):
-    if age == 0 or weight == 0 or height == 0:
+
+    if name == "" or age == 0 or weight == 0 or height == 0:
         st.warning("Please fill all fields with valid values.")
+
     else:
         if age >= 18:
             person = Adult(name, age, weight, height)
